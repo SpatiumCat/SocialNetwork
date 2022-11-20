@@ -1,13 +1,15 @@
+import kotlin.random.Random
+
 data class Post(
-    val id: Int,
-    val ownerId: Int,
-    val fromId: Int,
-    val date: Int,
-    val text: String,
-    val postType: String,
-    val canPin: Boolean,
-    val canDelete: Boolean,
-    val markAsAds: Boolean
+    val id: Int = 0,
+    val ownerId: Int = 0,
+    val fromId: Int = 0,
+    val date: Int = 0,
+    val text: String = "",
+    val postType: String = "",
+    val canPin: Boolean = false,
+    val canDelete: Boolean = false,
+    val markAsAds: Boolean = false
 ) {
 
     class Likes(count: Int, var userLikes: Boolean, var canLike: Boolean, val canPublish: Boolean) {
@@ -37,13 +39,33 @@ data class Post(
     }
 
     object WallService {
+
         private var posts = emptyArray<Post>()
+        private var nextId = 0
+
+        fun clear () {
+            posts = emptyArray()
+        }
 
         fun add (post: Post): Post {
-            posts += post
+           val post1 = post.copy(id = ++nextId)
+            posts += post1
             return posts.last()
         }
+
+        fun update (post: Post): Boolean {
+
+            for ((index, post1) in posts.withIndex()) {
+                if (post.id == post1.id){
+                    posts[index] = post.copy()
+                    return true
+                }
+            }
+            return false
+        }
     }
+
+
 }
 
 fun main() {
