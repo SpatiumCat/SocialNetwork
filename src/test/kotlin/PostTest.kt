@@ -1,7 +1,7 @@
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import Post.WallService
+import WallService
 
 class PostTest {
 
@@ -28,7 +28,7 @@ class PostTest {
         val updatedPost = Post(updatedPostId, text = "another post")
         val result = WallService.update(updatedPost)
 
-        assertEquals(true, result)
+        assertTrue(result)
     }
 
     @Test
@@ -40,6 +40,6 @@ class PostTest {
         val updatedPost = Post(updatedPostId + 1, text = "other post")
         val result = WallService.update(updatedPost)
 
-        assertEquals(false, result)
+        assertFalse(result)
     }
 }
