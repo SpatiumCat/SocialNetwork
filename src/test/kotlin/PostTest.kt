@@ -1,17 +1,16 @@
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import WallService
 
 class PostTest {
 
     @Before
-    fun clearBeforeTest () {
+    fun clearBeforeTest() {
         WallService.clear()
     }
 
     @Test
-    fun addTest_IdNotEqualZero(){
+    fun addTest_IdNotEqualZero() {
 
         val post = Post()
         val result = WallService.add(post)
@@ -20,7 +19,7 @@ class PostTest {
     }
 
     @Test
-    fun UpdateTestTrue(){
+    fun UpdateTestTrue() {
 
         val post = Post()
 
@@ -32,7 +31,7 @@ class PostTest {
     }
 
     @Test
-    fun UpdateTestFalse(){
+    fun UpdateTestFalse() {
 
         val post = Post()
 
