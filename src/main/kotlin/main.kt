@@ -26,7 +26,7 @@ data class Post(
     val isPinned: Boolean = false,
     val markAsAds: Boolean = false,
     val isFavorite: Boolean = false,
-    val donut: Donut,
+    val donut: Donut = Donut(),
     val postPonedId: Int = 0
 ) {
 }
