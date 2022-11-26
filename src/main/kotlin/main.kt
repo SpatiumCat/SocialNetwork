@@ -1,6 +1,7 @@
 import kotlin.random.Random
 
 data class Post(
+
     val id: Int = 0,
     val ownerId: Int = 0,
     val fromId: Int? = 0,
@@ -17,6 +18,13 @@ data class Post(
     val views: Views = Views(),
     val postType: String? = "",
     val postSource: PostSource = PostSource(),
+    var attachment: Array<Attachment> = arrayOf(
+        AudioAttachment(),
+        VideoAttachment(),
+        NoteAttachment(),
+        DocumentAttachment(),
+        LinkAttachment()
+    ),
     val geo: Geo = Geo(),
     val signerId: Int = 0,
     val copyHistory: Array<Post> = emptyArray(),
@@ -35,6 +43,7 @@ data class Views(var count: Int = 0)
 data class Reposts(var count: Int = 0, val userReposted: Boolean = false)
 
 data class Likes(
+
     var count: Int = 0,
     var userLikes: Boolean = false,
     val canLike: Boolean = false,
@@ -42,6 +51,7 @@ data class Likes(
 )
 
 data class Comments(
+
     val count: Int = 0,
     val canPost: Boolean = false,
     val groupCanPost: Boolean = false,
@@ -52,6 +62,7 @@ data class Comments(
 data class Copyright(val id: Int = 0, val link: String? = null, val name: String? = null, val tape: String? = null)
 
 data class PostSource(
+
     val type: String? = null,
     val platform: String? = null,
     val data: String? = null,
@@ -61,6 +72,7 @@ data class PostSource(
 data class Geo(val type: String? = null, val coordinates: String? = null)
 
 data class Donut(
+
     val isDonut: Boolean = false,
     val paidDuration: Int = 0,
     val placeholder: Placeholder = Placeholder(),
@@ -69,6 +81,106 @@ data class Donut(
 )
 
 class Placeholder()
+
+interface Attachment {
+    val type: String
+}
+
+class AudioAttachment() : Attachment {
+    override val type: String = "Audio"
+    val audio: Audio = Audio()
+}
+
+class VideoAttachment() : Attachment {
+    override val type: String = "Video"
+    val video: Video = Video()
+}
+
+class DocumentAttachment() : Attachment {
+    override val type: String = "Document"
+    val document: Document = Document()
+}
+
+class LinkAttachment() : Attachment {
+    override val type: String = "Link"
+    val link: Link = Link()
+}
+
+class NoteAttachment() : Attachment {
+    override val type: String = "Note"
+    val note: Note = Note()
+}
+
+data class Audio(
+
+    val id: Int = 0,
+    val ownerId: Int = 0,
+    val artist: String = "",
+    val title: String = "",
+    val duration: Int = 0,
+    val url: String = "",
+    val lyricsId: Int = 0,
+    val albumId: Int = 0,
+    val genreId: Int = 0,
+    val date: Int = 0,
+    val noSearch: Boolean = false,
+    val isHq: Boolean = false
+)
+
+data class Video(
+
+    val id: Int = 0,
+    val ownerId: Int = 0,
+    val title: String = "",
+    val description: String = "",
+    val duration: Int = 0,
+    val date: Int = 0,
+    val addingDate: Int = 0,
+    var views: Int = 0,
+    var local_views: Int = 0,
+    var comments: Int = 0,
+    val player: String = "",
+    val platform: String? = "",
+    val canAdd: Boolean = false,
+    val isPrivate: Boolean = false
+)
+
+data class Document(
+
+    val id: Int = 0,
+    val ownerId: Int = 0,
+    val title: String = "",
+    val size: Int = 0,
+    val ext: String = "",
+    val url: String? = "",
+    val date: Int = 0,
+    val type: Int = 0,
+)
+
+data class Link(
+
+    val url: String? = "",
+    val title: String = "",
+    val caption: String = "",
+    val description: String = "",
+    val previewPage: String = "",
+    val previewUrl: String = "",
+)
+
+data class Note(
+
+    val id: Int = 0,
+    val ownerId: Int = 0,
+    val title: String = "",
+    val date: Int = 0,
+    val text: String = "",
+    var comments: Int = 0,
+    var readComments: Int = 0,
+    val viewUrl: String? = "",
+    val privacyView: String = "",
+    val canComment: Boolean = false,
+
+    )
 
 
 object WallService {
