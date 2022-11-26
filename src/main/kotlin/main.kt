@@ -82,34 +82,13 @@ data class Donut(
 
 class Placeholder()
 
-interface Attachment {
-    val type: String
-}
+sealed class Attachment (val type: String)
+class AudioAttachment(val audio: Audio = Audio()) : Attachment("Audio")
+class VideoAttachment(val video: Video = Video()) : Attachment("Video")
+class DocumentAttachment(val document: Document = Document()) : Attachment("Document")
+class LinkAttachment(val link: Link = Link()) : Attachment("Link")
 
-class AudioAttachment() : Attachment {
-    override val type: String = "Audio"
-    val audio: Audio = Audio()
-}
-
-class VideoAttachment() : Attachment {
-    override val type: String = "Video"
-    val video: Video = Video()
-}
-
-class DocumentAttachment() : Attachment {
-    override val type: String = "Document"
-    val document: Document = Document()
-}
-
-class LinkAttachment() : Attachment {
-    override val type: String = "Link"
-    val link: Link = Link()
-}
-
-class NoteAttachment() : Attachment {
-    override val type: String = "Note"
-    val note: Note = Note()
-}
+class NoteAttachment(val note: Note = Note()) : Attachment("Note")
 
 data class Audio(
 
