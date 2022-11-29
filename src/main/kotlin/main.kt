@@ -83,12 +83,11 @@ data class Donut(
 class Placeholder()
 
 sealed class Attachment (val type: String)
-class AudioAttachment(val audio: Audio = Audio()) : Attachment("Audio")
-class VideoAttachment(val video: Video = Video()) : Attachment("Video")
-class DocumentAttachment(val document: Document = Document()) : Attachment("Document")
-class LinkAttachment(val link: Link = Link()) : Attachment("Link")
-
-class NoteAttachment(val note: Note = Note()) : Attachment("Note")
+class AudioAttachment(val audio: Audio = Audio()) : Attachment("audio")
+class VideoAttachment(val video: Video = Video()) : Attachment("video")
+class DocumentAttachment(val document: Document = Document()) : Attachment("document")
+class LinkAttachment(val link: Link = Link()) : Attachment("link")
+class NoteAttachment(val note: Note = Note()) : Attachment("note")
 
 data class Audio(
 
@@ -161,11 +160,46 @@ data class Note(
 
     )
 
+data class Comment(
+
+    val id: Int = 0,
+    val fromId: Int? = 0,
+    val date: Int = 0,
+    var text: String = "",
+    val donut: Donut = Donut(),
+    val replyToUser: Int = 0,
+    val replyToComment: Int = 0,
+    val attachment: Array<Attachment> = emptyArray(),
+    val parentsStack: Array<Any> = emptyArray<Any>(),
+    val thread: Thread = Thread()
+
+)
+
+data class Thread (
+    val count: Int = 0,
+    val items: Array<Any> = emptyArray(),
+    val canPost: Boolean = false,
+    val showReplyButton: Boolean = false,
+    val groupCanPost: Boolean = false
+        )
+class PostNotFoundException(message: String): Exception(message)
+
 
 object WallService {
 
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comment>()
     private var nextId = 0
+
+    fun creatComment (postId: Int, comment: Comment): Comment {
+        for (post in posts){
+            if (post.id == postId){
+                comments += comment
+                return comment
+            }
+        }
+        throw PostNotFoundException("No such post with this ID")
+    }
 
     fun clear() {
         posts = emptyArray()
@@ -188,6 +222,9 @@ object WallService {
         return false
     }
 }
+
+
+
 
 
 fun main() {
