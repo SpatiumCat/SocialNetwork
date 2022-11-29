@@ -41,4 +41,28 @@ class PostTest {
 
         assertFalse(result)
     }
+
+    @Test
+    fun creatComment_ShouldReturnComment(){
+
+        val post = Post()
+        val comment = Comment(text = "Hello, Netology")
+
+        val returnPost = WallService.add(post)
+        val returnComment = WallService.creatComment(returnPost.id, comment)
+
+        assertEquals(1, returnComment.id)
+        assertEquals(comment.text, returnComment.text)
+    }
+
+    @Test (expected = PostNotFoundException::class)
+    fun creatComment_ShouldThrowException() {
+
+        val post = Post()
+        val comment = Comment(text = "Hello, Netology")
+
+        val returnPost = WallService.add(post)
+        val returnComment = WallService.creatComment(returnPost.id + 1, comment)
+
+    }
 }

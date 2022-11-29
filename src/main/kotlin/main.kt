@@ -189,16 +189,17 @@ object WallService {
 
     private var posts = emptyArray<Post>()
     private var comments = emptyArray<Comment>()
-    private var nextId = 0
+    private var nextIdPost = 0
+    private var nextIdComment = 0
 
     fun creatComment (postId: Int, comment: Comment): Comment {
         for (post in posts){
             if (post.id == postId){
-                comments += comment
-                return comment
+                comments += comment.copy(id = ++nextIdComment)
+                return comments.last()
             }
         }
-        throw PostNotFoundException("No such post with this ID")
+        throw PostNotFoundException("No such posts with this ID")
     }
 
     fun clear() {
@@ -206,7 +207,7 @@ object WallService {
     }
 
     fun add(post: Post): Post {
-        val post1 = post.copy(id = ++nextId)
+        val post1 = post.copy(id = ++nextIdPost)
         posts += post1
         return posts.last()
     }
@@ -222,10 +223,6 @@ object WallService {
         return false
     }
 }
-
-
-
-
 
 fun main() {
     println("Hello, Kotlin")
