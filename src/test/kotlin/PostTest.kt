@@ -43,26 +43,54 @@ class PostTest {
     }
 
     @Test
-    fun creatComment_ShouldReturnComment(){
+    fun createComment_ShouldReturnComment(){
 
         val post = Post()
         val comment = Comment(text = "Hello, Netology")
 
         val returnPost = WallService.add(post)
-        val returnComment = WallService.creatComment(returnPost.id, comment)
+        val returnComment = WallService.createComment(returnPost.id, comment)
 
-        assertEquals(1, returnComment.id)
         assertEquals(comment.text, returnComment.text)
     }
 
     @Test (expected = PostNotFoundException::class)
-    fun creatComment_ShouldThrowException() {
+    fun createComment_ShouldThrowException() {
 
         val post = Post()
         val comment = Comment(text = "Hello, Netology")
 
         val returnPost = WallService.add(post)
-        val returnComment = WallService.creatComment(returnPost.id + 1, comment)
+        val returnComment = WallService.createComment(returnPost.id + 1, comment)
+
+    }
+
+    @Test
+    fun createReportAComment_ShouldTurnReport () {
+
+        val post = Post()
+        val comment = Comment(text = "Hello, World")
+        val report = ReportComment()
+
+        val returnPost = WallService.add(post)
+        val returnComment = WallService.createComment(returnPost.id, comment)
+        val returnReport = WallService.createReportAComment(returnComment.id, report)
+
+        assertEquals(returnComment.id, returnReport.commentId)
+        assertTrue(returnReport.reason is Spam)
+    }
+
+    @Test (expected = CommentNotFoundException::class)
+    fun createReportAComment_ShouldThrowException () {
+
+        val post = Post()
+        val comment = Comment(text = "Hello, World")
+        val report = ReportComment()
+
+        val returnPost = WallService.add(post)
+        val returnComment = WallService.createComment(returnPost.id, comment)
+        val returnReport = WallService.createReportAComment(returnComment.id + 1, report)
+
 
     }
 }

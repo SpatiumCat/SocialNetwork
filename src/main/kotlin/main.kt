@@ -1,5 +1,3 @@
-import kotlin.random.Random
-
 data class Post(
 
     val id: Int = 0,
@@ -174,7 +172,6 @@ data class Comment(
     val thread: Thread = Thread()
 
 )
-
 data class Thread (
     val count: Int = 0,
     val items: Array<Any> = emptyArray(),
@@ -182,17 +179,32 @@ data class Thread (
     val showReplyButton: Boolean = false,
     val groupCanPost: Boolean = false
         )
+
+data class ReportComment (val ownerId: Int = 0, val commentId: Int = 0, val reason: ReasonOfReport = Spam())
+
+sealed class ReasonOfReport (var message: String = "")
+class Spam(message: String = ""): ReasonOfReport(message)
+class PornWithKids(message: String = ""): ReasonOfReport(message)
+class Extremism(message: String = ""): ReasonOfReport(message)
+class Violent(message: String = ""): ReasonOfReport(message)
+class DrugPropaganda(message: String = ""): ReasonOfReport(message)
+class AdultContent(message: String = ""): ReasonOfReport(message)
+class Insult(message: String = ""): ReasonOfReport(message)
+class CallForSuicide(message: String = ""): ReasonOfReport(message)
+
 class PostNotFoundException(message: String): Exception(message)
+class CommentNotFoundException(message: String): Exception(message)
 
 
 object WallService {
 
     private var posts = emptyArray<Post>()
     private var comments = emptyArray<Comment>()
+    private var reportComments = emptyArray<ReportComment>()
     private var nextIdPost = 0
     private var nextIdComment = 0
 
-    fun creatComment (postId: Int, comment: Comment): Comment {
+    fun createComment (postId: Int, comment: Comment): Comment {
         for (post in posts){
             if (post.id == postId){
                 comments += comment.copy(id = ++nextIdComment)
@@ -204,6 +216,8 @@ object WallService {
 
     fun clear() {
         posts = emptyArray()
+        comments = emptyArray<Comment>()
+        reportComments = emptyArray<ReportComment>()
     }
 
     fun add(post: Post): Post {
@@ -221,6 +235,17 @@ object WallService {
             }
         }
         return false
+    }
+
+    fun createReportAComment (commentId: Int, report: ReportComment): ReportComment {
+
+        for (comment in comments){
+            if (comment.id == commentId) {
+                reportComments += report.copy(commentId = commentId)
+                return reportComments.last()
+            }
+        }
+        throw CommentNotFoundException("No such comment with this ID")
     }
 }
 
