@@ -6,6 +6,7 @@ class NoteTest {
 
     @Before
     fun clearNoteBeforeTest() {
+        Note.clear()
     }
 
     @Test
@@ -28,7 +29,7 @@ class NoteTest {
         val returnIdFirstNote = Note.addNote("Первая заметка", "Однажды в студеную зимнюю пору...", FriendsOnly(), FriendsOnly())
         val returnIdSecondNote = Note.addNote("Вторая заметка", "..Я из лесу вышел...", FriendsOnly(), FriendsOnly())
 
-       val result =  Note.deleteNote(2)
+       val result =  Note.deleteNote(returnIdSecondNote)
 
         assertTrue(result)
     }
@@ -55,7 +56,7 @@ class NoteTest {
 
         Note.addNote(Note.notes[1].title, Note.notes[1].text, Note.notes[1].privacy, Note.notes[1].commentPrivacy )
 
-        val result = Note.editNote(2,
+        val result = Note.editNote(returnIdSecondNote,
             "Обновленная вторая заметка",
             Note.notes[1].text,
             Note.notes[1].privacy,
