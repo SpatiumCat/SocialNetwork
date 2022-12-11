@@ -170,6 +170,7 @@ data class Note(
 
         fun clear() {
             notes = mutableListOf()
+            nextNoteId = 0
         }
 
         fun addNote(title: String, text: String, privacy: Privacy, commentPrivacy: Privacy): Int {
@@ -393,11 +394,10 @@ fun main() {
 
     Note.addNote("Третья заметка", "..был сильный мороз", FriendsOnly(), FriendsOnly())
 
-    Note.notes[0].createComment(Note.notes[0].id, "Комментарий к первой заметке")
-    Note.notes[0].createComment(Note.notes[0].id, "Второй комментарий к первой заметке")
-    Note.notes[1].createComment(Note.notes[1].id, "Комментарий ко второй заметке")
 
-    Note.notes[0].deleteComment(1)
+
+
+
 
     Note.notes[0].restoreComment(1)
 
