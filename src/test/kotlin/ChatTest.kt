@@ -35,4 +35,9 @@ class ChatTest {
 
         val result = ChatService.deleteChat(chat2)
     }
+
+    @Test
+    fun createMessage_ShouldReturnMessage() {
+
+    }
 }

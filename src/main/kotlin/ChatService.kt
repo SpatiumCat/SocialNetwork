@@ -34,14 +34,10 @@ data class Chat(
     }
 
     fun deleteMessage(justMessage: Message): Boolean {
-        for ((index, message) in messageList.withIndex()) {
-            if (message.id == justMessage.id) {
-                messageList.removeAt(index)
-                if (this.messageCount == 0) ChatService.deleteChat(this)
-                return true
-            }
-        }
-        throw MessageNotFoundException("Message not found")
+
+        val result = messageList.remove(messageList.find { it.id == justMessage.id })
+        if (result && this.messageCount == 0) ChatService.deleteChat(this)
+        return result
     }
 }
 
@@ -90,28 +86,28 @@ object ChatService {
         throw ChatNotFoundException ("Chat not found")
     }
 
-    fun createMessage(message: Message) {
+    fun createMessage(message: Message): Message {
         for (chat in chats) {
             if (chat.recipientId == message.recipientId) {
-                chat.sendMessage(message)
-                return
+                return chat.sendMessage(message)
             }
         }
         val newChat = Chat(ownerId = message.ownerId, recipientId = message.recipientId)
-        newChat.sendMessage(message)
+        val newMessage = newChat.sendMessage(message)
         addChat(newChat)
+        return newMessage
     }
 
-    fun receiveMessage(message: Message) {
+    fun receiveMessage(message: Message): Message {
         for (chat in chats) {
             if (chat.recipientId == message.ownerId) {
-                chat.receiveMessage(message)
-                return
+                return chat.receiveMessage(message)
             }
         }
         val newChat = Chat(ownerId = message.recipientId, recipientId = message.ownerId)
-        newChat.receiveMessage(message)
+        val newMessage = newChat.receiveMessage(message)
         addChat(newChat)
+        return newMessage
     }
 
     fun getUnreadChatsCount(ownerId: Int): Int {
@@ -119,10 +115,10 @@ object ChatService {
     }
 
     fun getChats(ownerId: Int): List<Chat> {
-        val list = chats.filter { it.ownerId == ownerId }.filter { it.messageCount > 0 }
-        return list.ifEmpty {
+        val list = chats.asSequence().filter { it.ownerId == ownerId }.filter { it.messageCount > 0 }
+        return list.toList().ifEmpty {
             println("Нет сообщений")
-            list
+            list.toList()
         }
     }
 
